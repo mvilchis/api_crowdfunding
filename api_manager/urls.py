@@ -16,6 +16,7 @@ Including another URLconf
 from rest_framework.routers import SimpleRouter
 from django.conf.urls import include, url
 from django.contrib import admin
+from rest_framework.authtoken import views
 
 from api_core.views import ProjectDonationViewSet, UserDonationViewSet, FundingDonationViewSet
 from api_core.views import ProjectRecompesasViewSet, UserRecompensasViewSet, FundingRecompensasViewSet
@@ -42,4 +43,5 @@ router.register(r'api/deuda/fondeo', FundingDeudaViewSet)
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
+    url(r'^api-token-auth/', views.obtain_auth_token),
 ]
