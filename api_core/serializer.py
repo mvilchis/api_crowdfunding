@@ -10,7 +10,7 @@ class ProjectDonationSerializer(ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
     class Meta:
         model = ProjectDonation
-        exclude = ('id', )
+        exclude = ('id','user' )
 
 
 class UserDonationSerializer(ModelSerializer):
@@ -18,14 +18,14 @@ class UserDonationSerializer(ModelSerializer):
 
     class Meta:
         model = UserDonation
-        exclude = ('id', )
+        exclude = ('id', 'user' )
 
 class FundingDonationSerializer(ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = FundingDonation
-        exclude = ('id', )
+        exclude = ('id', 'user' )
 
 
 class ProjectRecompesasSerializer(ModelSerializer):
@@ -33,7 +33,7 @@ class ProjectRecompesasSerializer(ModelSerializer):
 
     class Meta:
         model = ProjectRecompesas
-        exclude = ('id', )
+        exclude = ('id', 'user' )
 
 
 class UserRecompensasSerializer(ModelSerializer):
@@ -41,7 +41,7 @@ class UserRecompensasSerializer(ModelSerializer):
 
     class Meta:
         model = UserDonation
-        exclude = ('id', )
+        exclude = ('id', 'user')
 
 
 class FundingRecompensasSerializer(ModelSerializer):
@@ -49,7 +49,7 @@ class FundingRecompensasSerializer(ModelSerializer):
 
     class Meta:
         model = FundingDonation
-        exclude = ('id', )
+        exclude = ('id', 'user')
 
 
 class ProjectCapitalSerializer(ModelSerializer):
@@ -57,21 +57,21 @@ class ProjectCapitalSerializer(ModelSerializer):
 
     class Meta:
         model = ProjectCapital
-        exclude = ('id', )
+        exclude = ('id', 'user' )
 
 class UserCapitalSerializer(ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = UserCapital
-        exclude = ('id', )
+        exclude = ('id', 'user')
 
 class FundingCapitalSerializer(ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = FundingCapital
-        exclude = ('id', )
+        exclude = ('id', 'user')
 
 
 class ProjectDeudaSerializer(ModelSerializer):
@@ -79,18 +79,18 @@ class ProjectDeudaSerializer(ModelSerializer):
 
     class Meta:
         model = ProjectDeuda
-        exclude = ('id', )
+        exclude = ('id','user' )
 
 
 class UserDeudaSerializer(ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
     class Meta:
         model = UserDeuda
-        exclude = ('id', )
+        exclude = ('id', 'user')
 
 class FundingDeudaSerializer(ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = FundingDeuda
-        exclude = ('id', )
+        exclude = ('id', 'user')
