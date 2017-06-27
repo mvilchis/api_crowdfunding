@@ -1,0 +1,13 @@
+version: '2'
+services:
+
+    plataformacf:
+        image: api_crowdfunding
+        build:
+          context: .
+          dockerfile: Dockerfile
+        volumes:
+            - ./api_crowdfunding:/webhook/
+        ports:
+            - "8000:8000"
+        entrypoint: ["sh", "start.sh"]
