@@ -18,7 +18,7 @@ RUN apt-get update && \
 
 RUN mkdir webhook
 
-ADD . webhook/
+ADD api_crowdfunding webhook
 
 WORKDIR webhook
 
