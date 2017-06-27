@@ -70,84 +70,115 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class Project(models.Model):
     class Meta:
         abstract = True
-    user = models.ForeignKey(User, null = True)
+
+    user = models.ForeignKey(User, null=True)
     ID_Proyecto = models.IntegerField()
     ID_Usuario = models.IntegerField()
     Categoria = models.CharField(max_length=10, blank=True, null=True)
-    Subcategoria = models.CharField(max_length=10,  blank=True, null=True)
+    Subcategoria = models.CharField(max_length=10, blank=True, null=True)
 
 
 class ProjectDonation(Project):
-    Plazo_Dias = models.IntegerField( blank=True, null=True)
+    Plazo_Dias = models.IntegerField(blank=True, null=True)
     Fecha_Inicio = models.DateField()
-    Fecha_Termino = models.DateField( blank=True, null=True)
+    Fecha_Termino = models.DateField(blank=True, null=True)
     Monto_Recaudado = models.FloatField()
+
+    #class Meta:
+    #    unique_together = (("user", "ID_Proyecto", "ID_Usuario",
+    #                        "Fecha_Inicio", "Monto_Recaudado"), )
 
 
 class ProjectRecompesas(Project):
-    Plazo_Dias = models.IntegerField( blank=True, null=True)
+    Plazo_Dias = models.IntegerField(blank=True, null=True)
     Fecha_Inicio = models.DateField()
-    Fecha_Termino = models.DateField( blank=True, null=True)
+    Fecha_Termino = models.DateField(blank=True, null=True)
     Monto_Recaudado = models.FloatField()
+
+    #class Meta:
+    #    unique_together = (("user", "ID_Proyecto", "ID_Usuario",
+    #                        "Fecha_Inicio", "Monto_Recaudado"), )
 
 
 class ProjectCapital(Project):
     Monto_Aprobado = models.FloatField()
     Monto_Recaudado = models.FloatField()
-    Monto_Fondeado = models.BooleanField( blank=True)
+    Monto_Fondeado = models.BooleanField(blank=True)
     Fecha_Inicio = models.DateField()
-    Fecha_Termino = models.DateField( blank=True, null=True)
-    Plazo_Dias = models.IntegerField( blank=True, null=True)
-    Tasa_Interes = models.FloatField( blank=True, null=True)
-    Cuota_Comision = models.FloatField( blank=True, null=True)
+    Fecha_Termino = models.DateField(blank=True, null=True)
+    Plazo_Dias = models.IntegerField(blank=True, null=True)
+    Tasa_Interes = models.FloatField(blank=True, null=True)
+    Cuota_Comision = models.FloatField(blank=True, null=True)
+
+    #class Meta:
+    #    unique_together = (
+    #        ("user", "ID_Proyecto", "ID_Usuario", "Fecha_Inicio",
+    #         "Monto_Recaudado", "Monto_Aprobado"), )
 
 
 class ProjectDeuda(Project):
     Monto_Aprobado = models.FloatField()
-    Monto_Fondeado = models.FloatField( blank=True, null=True)
-    Plazo_Dias = models.IntegerField( blank=True, null=True)
-    Tasa_Anual_fraccion = models.FloatField( blank=True, null=True)
-    Fecha_Termino = models.DateField( blank=True, null=True)
+    Monto_Fondeado = models.FloatField(blank=True, null=True)
+    Plazo_Dias = models.IntegerField(blank=True, null=True)
+    Tasa_Anual_fraccion = models.FloatField(blank=True, null=True)
+    Fecha_Termino = models.DateField(blank=True, null=True)
     Fecha_Inicio = models.DateField()
-    Comision_Apertura = models.FloatField( blank=True, null=True)
-    Capital_Pagado = models.FloatField( blank=True, null=True)
-    Interes_Pagados = models.FloatField( blank=True, null=True)
-    Interes_Moratorios_Pagados = models.FloatField( blank=True, null=True)
+    Comision_Apertura = models.FloatField(blank=True, null=True)
+    Capital_Pagado = models.FloatField(blank=True, null=True)
+    Interes_Pagados = models.FloatField(blank=True, null=True)
+    Interes_Moratorios_Pagados = models.FloatField(blank=True, null=True)
+
+    #class Meta:
+    #    unique_together = (("user", "ID_Proyecto", "ID_Usuario",
+    #                        "Fecha_Inicio", "Monto_Aprobado"), )
 
 
 class UserProject(models.Model):
     class Meta:
         abstract = True
 
-    user = models.ForeignKey(User, null =True)
+    user = models.ForeignKey(User, null=True)
     ID_usuario = models.IntegerField()
-    Sexo = models.CharField(max_length=10, choices=SEX_CHOICES, blank=True, null=True)
-    AnioNacimiento = models.DateField( blank=True, null=True)
-    Estado = models.CharField(max_length=10, choices=COUNTRY_CHOICES, blank=True, null=True)
-    Edad = models.IntegerField( blank=True, null=True)
+    Sexo = models.CharField(
+        max_length=10, choices=SEX_CHOICES, blank=True, null=True)
+    AnioNacimiento = models.DateField(blank=True, null=True)
+    Estado = models.CharField(
+        max_length=10, choices=COUNTRY_CHOICES, blank=True, null=True)
+    Edad = models.IntegerField(blank=True, null=True)
 
 
 class UserDonation(UserProject):
     pass
+    #class Meta:
+    #    unique_together = (("user", "ID_usuario"), )
 
 
 class UserRecompensas(UserProject):
-    Codigo_Postal = models.IntegerField( blank=True, null=True)
+    Codigo_Postal = models.IntegerField(blank=True, null=True)
+
+    #class Meta:
+    #    unique_together = (("user", "ID_usuario"), )
 
 
 class UserCapital(UserProject):
     pass
+    #class Meta:
+    #    unique_together = (("user", "ID_usuario"), )
 
 
 class UserDeuda(UserProject):
     Estado_Civil = models.CharField(max_length=10, blank=True, null=True)
-    Codigo_Postal = models.IntegerField( blank=True, null=True)
+    Codigo_Postal = models.IntegerField(blank=True, null=True)
+
+    #class Meta:
+    #    unique_together = (("user", "ID_usuario"), )
 
 
 class Funding(models.Model):
     class Meta:
         abstract = True
-    user = models.ForeignKey(User,null = True)
+
+    user = models.ForeignKey(User, null=True)
     ID_Proyecto = models.IntegerField()
     ID_Usuario = models.IntegerField()
     Monto_Recaudado = models.FloatField()
@@ -156,16 +187,30 @@ class Funding(models.Model):
 
 class FundingDonation(Funding):
     pass
+    #class Meta:
+    #    unique_together = (("user", "ID_Proyecto", "ID_Usuario", "Fecha",
+    #                        "Monto_Recaudado"), )
 
 
 class FundingRecompensas(Funding):
-    Fondeadores = models.IntegerField( blank=True, null=True)
+    Fondeadores = models.IntegerField(blank=True, null=True)
     Exito_Fondeo = models.BooleanField(blank=True)
+
+    #class Meta:
+    #    unique_together = (("user", "ID_Proyecto", "ID_Usuario", "Fecha",
+    #                        "Monto_Recaudado"), )
 
 
 class FundingCapital(Funding):
     pass
+    #class Meta:
+    #    unique_together = (("user", "ID_Proyecto", "ID_Usuario", "Fecha",
+    #                        "Monto_Recaudado"), )
 
 
 class FundingDeuda(Funding):
     Tipo_Movimiento = models.CharField(max_length=10, blank=True, null=True)
+
+    #class Meta:
+    #    unique_together = (("user", "ID_Proyecto", "ID_Usuario", "Fecha",
+    #                        "Monto_Recaudado"), )
