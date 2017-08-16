@@ -2,20 +2,40 @@
 from __future__ import unicode_literals
 from django.shortcuts import render
 
-from rest_framework.viewsets import ModelViewSet
+#############   REST Libraries      ##########
+#from rest_framework.viewsets import ListBulkCreateUpdateDestroyAPIView
+from rest_framework import permissions
+from rest_framework import generics
+from rest_framework_bulk import ListBulkCreateUpdateDestroyAPIView
 
-from serializer import ProjectDonationSerializer, UserDonationSerializer, FundingDonationSerializer
-from serializer import ProjectRecompesasSerializer, UserRecompensasSerializer, FundingRecompensasSerializer
-from serializer import ProjectCapitalSerializer, UserCapitalSerializer, FundingCapitalSerializer
-from serializer import ProjectDeudaSerializer, UserDeudaSerializer, FundingDeudaSerializer
 
-from api_core.models import (ProjectDonation, UserDonation, FundingDonation)
-from models import ProjectRecompesas, UserRecompensas, FundingRecompensas
-from models import ProjectCapital, UserCapital, FundingCapital
-from models import ProjectDeuda, UserDeuda, FundingDeuda
+#############      My libraries     ##########
+from serializer import (ProjectDonationSerializer,
+                        ProjectDeudaSerializer,
+                        ProjectRecompesasSerializer,
+                        ProjectCapitalSerializer,
+                        UserDonationSerializer,
+                        UserRecompensasSerializer,
+                        UserCapitalSerializer,
+                        UserDeudaSerializer,
+                        FundingDonationSerializer,
+                        FundingRecompensasSerializer,
+                        FundingCapitalSerializer,
+                        FundingDeudaSerializer,)
+from models     import (ProjectDonation,
+                        ProjectRecompesas,
+                        ProjectCapital,
+                        ProjectDeuda,
+                        UserDonation,
+                        UserRecompensas,
+                        UserCapital,
+                        UserDeuda,
+                        FundingDonation,
+                        FundingRecompensas,
+                        FundingCapital,
+                        FundingDeuda)
 
 from django.contrib.auth.models import Group
-from rest_framework import permissions
 
 # Create your views here.
 
@@ -47,7 +67,7 @@ class HasGroupPermission(permissions.BasePermission):
         ])
 
 
-class ProjectDonationViewSet(ModelViewSet):
+class ProjectDonationViewSet(ListBulkCreateUpdateDestroyAPIView):
     permission_classes = [HasGroupPermission]
     required_groups = {
         'GET': ['Donacion'],
@@ -57,7 +77,7 @@ class ProjectDonationViewSet(ModelViewSet):
     serializer_class = ProjectDonationSerializer
 
 
-class UserDonationViewSet(ModelViewSet):
+class UserDonationViewSet(ListBulkCreateUpdateDestroyAPIView):
     permission_classes = [HasGroupPermission]
     required_groups = {
         'GET': ['Donacion'],
@@ -67,7 +87,7 @@ class UserDonationViewSet(ModelViewSet):
     serializer_class = UserDonationSerializer
 
 
-class FundingDonationViewSet(ModelViewSet):
+class FundingDonationViewSet(ListBulkCreateUpdateDestroyAPIView):
     permission_classes = [HasGroupPermission]
     required_groups = {
         'GET': ['Donacion'],
@@ -77,7 +97,7 @@ class FundingDonationViewSet(ModelViewSet):
     serializer_class = FundingDonationSerializer
 
 
-class ProjectRecompesasViewSet(ModelViewSet):
+class ProjectRecompesasViewSet(ListBulkCreateUpdateDestroyAPIView):
     permission_classes = [HasGroupPermission]
     required_groups = {
         'GET': ['Recompensas'],
@@ -87,7 +107,7 @@ class ProjectRecompesasViewSet(ModelViewSet):
     serializer_class = ProjectRecompesasSerializer
 
 
-class UserRecompensasViewSet(ModelViewSet):
+class UserRecompensasViewSet(ListBulkCreateUpdateDestroyAPIView):
     permission_classes = [HasGroupPermission]
     required_groups = {
         'GET': ['Recompensas'],
@@ -97,7 +117,7 @@ class UserRecompensasViewSet(ModelViewSet):
     serializer_class = UserRecompensasSerializer
 
 
-class FundingRecompensasViewSet(ModelViewSet):
+class FundingRecompensasViewSet(ListBulkCreateUpdateDestroyAPIView):
     permission_classes = [HasGroupPermission]
     required_groups = {
         'GET': ['Recompensas'],
@@ -107,7 +127,7 @@ class FundingRecompensasViewSet(ModelViewSet):
     serializer_class = FundingRecompensasSerializer
 
 
-class ProjectCapitalViewSet(ModelViewSet):
+class ProjectCapitalViewSet(ListBulkCreateUpdateDestroyAPIView):
     permission_classes = [HasGroupPermission]
     required_groups = {
         'GET': ['Capital'],
@@ -117,7 +137,7 @@ class ProjectCapitalViewSet(ModelViewSet):
     serializer_class = ProjectCapitalSerializer
 
 
-class UserCapitalViewSet(ModelViewSet):
+class UserCapitalViewSet(ListBulkCreateUpdateDestroyAPIView):
     permission_classes = [HasGroupPermission]
     required_groups = {
         'GET': ['Capital'],
@@ -127,7 +147,7 @@ class UserCapitalViewSet(ModelViewSet):
     serializer_class = UserCapitalSerializer
 
 
-class FundingCapitalViewSet(ModelViewSet):
+class FundingCapitalViewSet(ListBulkCreateUpdateDestroyAPIView):
     required_groups = {
         'GET': ['Capital'],
         'POST': ['Capital'],
@@ -136,7 +156,7 @@ class FundingCapitalViewSet(ModelViewSet):
     serializer_class = FundingCapitalSerializer
 
 
-class ProjectDeudaViewSet(ModelViewSet):
+class ProjectDeudaViewSet(ListBulkCreateUpdateDestroyAPIView):
     required_groups = {
         'GET': ['Deuda'],
         'POST': ['Deuda'],
@@ -145,7 +165,7 @@ class ProjectDeudaViewSet(ModelViewSet):
     serializer_class = ProjectDeudaSerializer
 
 
-class UserDeudaViewSet(ModelViewSet):
+class UserDeudaViewSet(ListBulkCreateUpdateDestroyAPIView):
     required_groups = {
         'GET': ['Deuda'],
         'POST': ['Deuda'],
@@ -154,7 +174,7 @@ class UserDeudaViewSet(ModelViewSet):
     serializer_class = UserDeudaSerializer
 
 
-class FundingDeudaViewSet(ModelViewSet):
+class FundingDeudaViewSet(ListBulkCreateUpdateDestroyAPIView):
     required_groups = {
         'GET': ['Deuda'],
         'POST': ['Deuda'],

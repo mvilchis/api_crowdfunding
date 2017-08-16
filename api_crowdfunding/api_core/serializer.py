@@ -1,96 +1,128 @@
-from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField,CurrentUserDefault
+################    REST Libraries      ##################
+from rest_framework import serializers
+from rest_framework.serializers import (PrimaryKeyRelatedField,
+                                        CurrentUserDefault)
 
-from models import ProjectDonation, UserDonation, FundingDonation
-from models import ProjectRecompesas, UserRecompensas, FundingRecompensas
-from models import ProjectCapital, UserCapital, FundingCapital
-from models import ProjectDeuda, UserDeuda, FundingDeuda
-from rest_framework.fields import CurrentUserDefault
+from rest_framework_bulk import (BulkListSerializer,
+                                 BulkSerializerMixin,)
 
-class ProjectDonationSerializer(ModelSerializer):
+################          My code       ##################
+from models import (ProjectDonation,
+                    ProjectRecompesas,
+                    ProjectCapital,
+                    ProjectDeuda,
+                    UserDonation,
+                    UserRecompensas,
+                    UserCapital,
+                    UserDeuda,
+                    FundingDonation,
+                    FundingRecompensas,
+                    FundingCapital,
+                    FundingDeuda)
+
+class ProjectDonationSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
     class Meta:
         model = ProjectDonation
         exclude = ('id','user' )
+        list_serializer_class = BulkListSerializer
 
 
-class UserDonationSerializer(ModelSerializer):
+
+class UserDonationSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = UserDonation
         exclude = ('id', 'user' )
+        list_serializer_class = BulkListSerializer
 
-class FundingDonationSerializer(ModelSerializer):
+
+class FundingDonationSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = FundingDonation
         exclude = ('id', 'user' )
+        list_serializer_class = BulkListSerializer
 
 
-class ProjectRecompesasSerializer(ModelSerializer):
+
+class ProjectRecompesasSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = ProjectRecompesas
         exclude = ('id', 'user' )
+        list_serializer_class = BulkListSerializer
 
 
-class UserRecompensasSerializer(ModelSerializer):
+
+class UserRecompensasSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = UserDonation
         exclude = ('id', 'user')
+        list_serializer_class = BulkListSerializer
 
 
-class FundingRecompensasSerializer(ModelSerializer):
+
+class FundingRecompensasSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = FundingDonation
         exclude = ('id', 'user')
+        list_serializer_class = BulkListSerializer
 
 
-class ProjectCapitalSerializer(ModelSerializer):
+
+class ProjectCapitalSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = ProjectCapital
         exclude = ('id', 'user' )
 
-class UserCapitalSerializer(ModelSerializer):
+class UserCapitalSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = UserCapital
         exclude = ('id', 'user')
+        list_serializer_class = BulkListSerializer
 
-class FundingCapitalSerializer(ModelSerializer):
+
+class FundingCapitalSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = FundingCapital
         exclude = ('id', 'user')
+        list_serializer_class = BulkListSerializer
 
 
-class ProjectDeudaSerializer(ModelSerializer):
+class ProjectDeudaSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = ProjectDeuda
         exclude = ('id','user' )
+        list_serializer_class = BulkListSerializer
 
 
-class UserDeudaSerializer(ModelSerializer):
+class UserDeudaSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
     class Meta:
         model = UserDeuda
         exclude = ('id', 'user')
+        list_serializer_class = BulkListSerializer
 
-class FundingDeudaSerializer(ModelSerializer):
+class FundingDeudaSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         model = FundingDeuda
         exclude = ('id', 'user')
+        list_serializer_class = BulkListSerializer

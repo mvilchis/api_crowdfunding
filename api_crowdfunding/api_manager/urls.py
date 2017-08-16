@@ -18,30 +18,34 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework.authtoken import views
 
-from api_core.views import ProjectDonationViewSet, UserDonationViewSet, FundingDonationViewSet
-from api_core.views import ProjectRecompesasViewSet, UserRecompensasViewSet, FundingRecompensasViewSet
-from api_core.views import ProjectCapitalViewSet, UserCapitalViewSet, FundingCapitalViewSet
-from api_core.views import ProjectDeudaViewSet, UserDeudaViewSet, FundingDeudaViewSet
+from api_core.views import (ProjectDonationViewSet,
+                            ProjectRecompesasViewSet,
+                            ProjectCapitalViewSet,
+                            ProjectDeudaViewSet,
+                            UserDonationViewSet,
+                            UserCapitalViewSet,
+                            UserRecompensasViewSet,
+                            UserDeudaViewSet, 
+                            FundingRecompensasViewSet,
+                            FundingDonationViewSet,
+                            FundingCapitalViewSet,
+                            FundingDeudaViewSet)
 
-router = SimpleRouter()
-router.register(r'api/donacion/proyecto', ProjectDonationViewSet)
-router.register(r'api/donacion/usuario', UserDonationViewSet)
-router.register(r'api/donacion/fondeo', FundingDonationViewSet)
-
-router.register(r'api/recompensas/proyecto', ProjectRecompesasViewSet)
-router.register(r'api/recompensas/usuario', UserRecompensasViewSet)
-router.register(r'api/recompensas/fondeo', FundingRecompensasViewSet)
-
-router.register(r'api/capital/proyecto', ProjectCapitalViewSet)
-router.register(r'api/capital/usuario', UserCapitalViewSet)
-router.register(r'api/capital/fondeo', FundingCapitalViewSet)
-
-router.register(r'api/deuda/proyecto', ProjectDeudaViewSet)
-router.register(r'api/deuda/usuario', UserDeudaViewSet)
-router.register(r'api/deuda/fondeo', FundingDeudaViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include(router.urls)),
     url(r'^api-token-auth/', views.obtain_auth_token),
+    url(r'^api/donacion/proyecto', ProjectDonationViewSet.as_view()),
+    url(r'^api/donacion/usuario', UserDonationViewSet.as_view()),
+    url(r'^api/donacion/fondeo', FundingDonationViewSet.as_view()),
+    url(r'^api/recompensas/proyecto', ProjectRecompesasViewSet.as_view()),
+    url(r'^api/recompensas/usuario', UserRecompensasViewSet.as_view()),
+    url(r'^api/recompensas/fondeo', FundingRecompensasViewSet.as_view()),
+    url(r'^api/capital/proyecto', ProjectCapitalViewSet.as_view()),
+    url(r'^api/capital/usuario', UserCapitalViewSet.as_view()),
+    url(r'^api/capital/fondeo', FundingCapitalViewSet.as_view()),
+    url(r'^api/deuda/proyecto', ProjectDeudaViewSet.as_view()),
+    url(r'^api/deuda/usuario', UserDeudaViewSet.as_view()),
+    url(r'^api/deuda/fondeo', FundingDeudaViewSet.as_view()),
+
 ]

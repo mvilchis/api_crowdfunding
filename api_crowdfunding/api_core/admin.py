@@ -6,7 +6,7 @@ from .models import  *
 # Register your models here.
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('user', 'ID_Proyecto', 'ID_usuario')
+    list_display = ('user', 'ID_Proyecto' )
 class UserAdmin(admin.ModelAdmin):
     list_display = ('user','ID_usuario', 'Estado')
 class FundingAdmin(admin.ModelAdmin):
