@@ -6,11 +6,11 @@ from .models import  *
 # Register your models here.
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('user', 'ID_Proyecto' )
+    list_display = ('user', 'IdProyecto', 'IdUsuario' )
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('user','ID_usuario', 'Estado')
+    list_display = ('user','IdUsuario', 'Estado')
 class FundingAdmin(admin.ModelAdmin):
-    list_display = ('user', 'ID_Proyecto', 'ID_Usuario')
+    list_display = ('user', 'IdProyecto', 'IdUsuario')
 
 
 admin.site.register(ProjectDonation, ProjectAdmin)

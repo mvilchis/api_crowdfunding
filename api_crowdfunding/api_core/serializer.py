@@ -67,7 +67,6 @@ class UserRecompensasSerializer(BulkSerializerMixin,serializers.ModelSerializer)
         list_serializer_class = BulkListSerializer
 
 
-
 class FundingRecompensasSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
@@ -92,7 +91,6 @@ class UserCapitalSerializer(BulkSerializerMixin,serializers.ModelSerializer):
         model = UserCapital
         exclude = ('id', 'user')
         list_serializer_class = BulkListSerializer
-
 
 class FundingCapitalSerializer(BulkSerializerMixin,serializers.ModelSerializer):
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
