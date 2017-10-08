@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import string
 import sys
 
-import numpy as np
 import pandas as pd
 from pandas.core.groupby import GroupBy
 
