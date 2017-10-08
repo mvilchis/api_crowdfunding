@@ -1,14 +1,10 @@
-import string
-
-import numpy as np
-import pandas as pd
 from pandas.core.groupby import GroupBy
 
 from api_core.indexes2 import (format_funding_data, format_projects_data,
                                format_users_data, get_fundind_data,
                                get_indexes, get_projects_data, get_users_data,
                                merge_data, nunique)
-from api_core.models import FundingDeuda, ProjectDeuda, User, UserDeuda
+from api_core.models import FundingDeuda, ProjectDeuda, UserDeuda
 from django.core.management.base import BaseCommand
 
 
