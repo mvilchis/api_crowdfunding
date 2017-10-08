@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-import sys
-
 import pandas as pd
 from pandas.core.groupby import GroupBy
 
