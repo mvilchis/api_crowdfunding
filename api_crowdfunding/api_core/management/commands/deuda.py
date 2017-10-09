@@ -3,11 +3,12 @@ from pandas.core.groupby import GroupBy
 from api_core.indexes import (format_funding_data, format_projects_data,
                               format_users_data, get_fundind_data, get_indexes,
                               get_projects_data, get_users_data, merge_data,
-                              nunique)
+                              nunique, save_data)
 from api_core.models import FundingDeuda, ProjectDeuda, UserDeuda
 from django.core.management.base import BaseCommand
 
 ID = 'i1'
+NAME = 'Deuda'
 
 
 class Command(BaseCommand):
@@ -89,10 +90,4 @@ class Command(BaseCommand):
             u'Duracion'
         }]
         data, ID2, DesGeo, RangeT = get_indexes(indexes, _id=ID, estatal=True)
-        data.to_csv(
-            'DeudaData2.csv',
-            index=False,
-            columns=["id", "m", "t", "valor", "id2", "cve", "DesGeo"])
-        ID2.to_csv('DeudaCodigosGrupos2.csv', index=False)
-        DesGeo.to_csv('DeudaDesGeo2.csv', index=False)
-        RangeT.to_csv('DeudaRangosTemporales2.csv', index=False)
+        save_data(NAME, data, ID2, DesGeo, RangeT)

@@ -203,3 +203,14 @@ def get_acumulado(data):
         'AcumuladoDonacion.csv',
         index=False,
         columns=["id", "cve", "t", "valor", "m", "id2", "DesGeo"])
+
+
+def save_data(name, data, ID2, DesGeo, RangeT):
+    path = 'data/%s' % name
+    data.to_csv(
+        '%sData2.csv' % path,
+        index=False,
+        columns=["id", "m", "t", "valor", "id2", "cve", "DesGeo"])
+    ID2.to_csv('%sCodigosGrupos.csv' % path, index=False)
+    DesGeo.to_csv('%sDesGeo.csv' % path, index=False)
+    RangeT.to_csv('%sRangosTemporales.csv' % path, index=False)

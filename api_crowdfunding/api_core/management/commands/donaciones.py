@@ -4,7 +4,7 @@ from pandas.core.groupby import GroupBy
 from api_core.indexes import (format_funding_data, format_projects_data,
                               format_users_data, get_fundind_data, get_indexes,
                               get_projects_data, get_users_data, merge_data,
-                              nunique)
+                              nunique, save_data)
 from api_core.mi_cochinito import (get_micochinito_donations,
                                    get_micochinito_donors,
                                    get_micochinito_projects)
@@ -12,6 +12,7 @@ from api_core.models import FundingDonation, ProjectDonation, UserDonation
 from django.core.management.base import BaseCommand
 
 ID = 'i3'
+NAME = 'Donaciones'
 
 
 class Command(BaseCommand):
@@ -73,11 +74,4 @@ class Command(BaseCommand):
         }]
 
         data, ID2, DesGeo, RangeT = get_indexes(indexes, _id=ID, estatal=False)
-
-        data.to_csv(
-            'DonacionesData2.csv',
-            index=False,
-            columns=["id", "m", "t", "valor", "id2", "cve", "DesGeo"])
-        ID2.to_csv('DonacionesCodigosGrupos2.csv', index=False)
-        DesGeo.to_csv('DonacionesDesGeo2.csv', index=False)
-        RangeT.to_csv('DonacionesRangosTemporales2.csv', index=False)
+        save_data(NAME, data, ID2, DesGeo, RangeT)
