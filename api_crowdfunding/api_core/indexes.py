@@ -10,6 +10,8 @@ sys.setdefaultencoding('UTF8')
 
 nunique = lambda x: x.nunique()
 
+DATA_PATH = 'data/'
+
 
 def get_CP():
     #url = "http://www.correosdemexico.gob.mx/datosabiertos/cp/cpdescarga.txt"
@@ -174,18 +176,16 @@ def get_indexes(indexes, _id, estatal=False):
     return data, ID2, DesGeo, RangeT
 
 
-def get_acumulado(data):
+def get_acumulado(data, name):
     years = data['t'].drop_duplicates().values
-    years.sort()
     file_acumulado = []
     acumulado = []
-    for y in [2015, 2016, 2017]:
-        by_year = donacion.loc[donacion["t"] == y]
-        for t in [1, 2, 3, 4]:
-            if y == 2017 and t == 4:
-                break
-
-            by_quarter = by_year.loc[by_year["m"] == t]
+    for y in range(min(years), max(years) + 1):
+        by_year = data.loc[data["t"] == y]
+        quarters = by_year['m'].drop_duplicates().values
+        quarters.sort()
+        for q in quarters:
+            by_quarter = by_year.loc[by_year["m"] == q]
             actual = by_quarter[[u'id', u'cve', 'id2', 'valor', 'DesGeo']]
 
             acumulado.append(actual)
@@ -194,19 +194,20 @@ def get_acumulado(data):
                 [u'id', u'cve', 'id2', 'DesGeo'])['valor'].sum().reset_index(
                     name="valor")
             aux["t"] = y
-            aux["m"] = t
+            aux["m"] = q
             aux["id"] = aux["id"].astype(str) + "1"
 
             file_acumulado.append(aux)
+    path = '%s%s' % (DATA_PATH, name)
 
     pd.concat(file_acumulado).to_csv(
-        'AcumuladoDonacion.csv',
+        '%sAcumulado.csv' % path,
         index=False,
         columns=["id", "cve", "t", "valor", "m", "id2", "DesGeo"])
 
 
 def save_data(name, data, ID2, DesGeo, RangeT):
-    path = 'data/%s' % name
+    path = '%s%s' % (DATA_PATH, name)
     data.to_csv(
         '%sData.csv' % path,
         index=False,
