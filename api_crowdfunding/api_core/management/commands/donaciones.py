@@ -1,15 +1,17 @@
 import pandas as pd
 from pandas.core.groupby import GroupBy
 
-from api_core.indexes2 import (format_funding_data, format_projects_data,
-                               format_users_data, get_fundind_data,
-                               get_indexes, get_projects_data, get_users_data,
-                               merge_data, nunique)
+from api_core.indexes import (format_funding_data, format_projects_data,
+                              format_users_data, get_fundind_data, get_indexes,
+                              get_projects_data, get_users_data, merge_data,
+                              nunique)
 from api_core.mi_cochinito import (get_micochinito_donations,
                                    get_micochinito_donors,
                                    get_micochinito_projects)
 from api_core.models import FundingDonation, ProjectDonation, UserDonation
 from django.core.management.base import BaseCommand
+
+ID = 'i3'
 
 
 class Command(BaseCommand):
@@ -39,19 +41,15 @@ class Command(BaseCommand):
 
         indexes = [{
             'dataframe': projects_users_data,
-            '_id': 'i31',
             'operation': GroupBy.size,
             'elements': [u'Total', u'Categoria', 'Genero']
         }, {
             'dataframe': succesful_projects_data,
-            '_id': 'i32',
             'operation': GroupBy.size,
             'elements': [u'Total', u'Categoria', 'Genero']
         }, {
             'dataframe':
             projects_users_data,
-            '_id':
-            'i33',
             'operation':
             GroupBy.sum,
             'elements': [u'Total', u'Categoria', 'Genero', u'ExitoFondeo'],
@@ -59,25 +57,22 @@ class Command(BaseCommand):
             u'MontoRecaudado'
         }, {
             'dataframe': projects_users_data,
-            '_id': 'i34',
             'operation': GroupBy.mean,
             'elements': [u'Total', u'Categoria', 'Genero'],
             'column': u'ExitoFondeo'
         }, {
             'dataframe': fundings_users_data,
-            '_id': 'i35',
             'operation': nunique,
             'elements': [u'Total', 'Genero'],
             'column': u'IdUsuario'
         }, {
             'dataframe': fundings_users_data,
-            '_id': 'i36',
             'operation': GroupBy.mean,
             'elements': [u'Total', 'Genero'],
             'column': u'MontoRecaudado'
         }]
 
-        data, ID2, DesGeo, RangeT = get_indexes(indexes, estatal=False)
+        data, ID2, DesGeo, RangeT = get_indexes(indexes, _id=ID, estatal=False)
 
         data.to_csv(
             'DonacionesData2.csv',

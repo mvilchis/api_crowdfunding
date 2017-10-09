@@ -1,11 +1,13 @@
 from pandas.core.groupby import GroupBy
 
-from api_core.indexes2 import (format_funding_data, format_projects_data,
-                               format_users_data, get_fundind_data,
-                               get_indexes, get_projects_data, get_users_data,
-                               merge_data, nunique)
+from api_core.indexes import (format_funding_data, format_projects_data,
+                              format_users_data, get_fundind_data, get_indexes,
+                              get_projects_data, get_users_data, merge_data,
+                              nunique)
 from api_core.models import FundingDeuda, ProjectDeuda, UserDeuda
 from django.core.management.base import BaseCommand
+
+ID = 'i1'
 
 
 class Command(BaseCommand):
@@ -26,24 +28,18 @@ class Command(BaseCommand):
         indexes = [{
             'dataframe':
             projects_users_data,
-            '_id':
-            'i11',
             'operation':
             GroupBy.size,
             'elements': [u'Total', u'Categoria', 'Genero', 'EstadoCivil']
         }, {
             'dataframe':
             succesful_projects_data,
-            '_id':
-            'i12',
             'operation':
             GroupBy.size,
             'elements': [u'Total', u'Categoria', 'Genero', 'EstadoCivil']
         }, {
             'dataframe':
             projects_users_data,
-            '_id':
-            'i13',
             'operation':
             GroupBy.sum,
             'elements': [u'Total', u'Categoria', 'Genero', u'EstadoCivil'],
@@ -52,24 +48,15 @@ class Command(BaseCommand):
         }, {
             'dataframe':
             projects_users_data,
-            '_id':
-            'i14',
             'operation':
             GroupBy.mean,
-            'elements': [u'Total', u'Categoria', 'Genero', u'EstadoCivil'],
+            'elements':
+            [u'Total', u'Categoria', 'Genero', u'EstadoCivil', u'ExitoFondeo'],
             'column':
             u'MontoRecaudado'
         }, {
-            'dataframe': succesful_projects_data,
-            '_id': 'i14',
-            'operation': GroupBy.mean,
-            'elements': [u'Total'],
-            'column': u'MontoRecaudado'
-        }, {
             'dataframe':
             projects_users_data,
-            '_id':
-            'i15',
             'operation':
             GroupBy.mean,
             'elements': [u'Total', u'Categoria', 'Genero', 'EstadoCivil'],
@@ -78,8 +65,6 @@ class Command(BaseCommand):
         }, {
             'dataframe':
             projects_users_data,
-            '_id':
-            'i16',
             'operation':
             GroupBy.mean,
             'elements': [
@@ -90,15 +75,12 @@ class Command(BaseCommand):
             u'TasaInteresAnual'
         }, {
             'dataframe': fundings_users_data,
-            '_id': 'i17',
             'operation': nunique,
             'elements': [u'Total'],
             'column': u'IdUsuario'
         }, {
             'dataframe':
             projects_users_data,
-            '_id':
-            'i18',
             'operation':
             GroupBy.mean,
             'elements':
@@ -106,7 +88,7 @@ class Command(BaseCommand):
             'column':
             u'Duracion'
         }]
-        data, ID2, DesGeo, RangeT = get_indexes(indexes, estatal=True)
+        data, ID2, DesGeo, RangeT = get_indexes(indexes, _id=ID, estatal=True)
         data.to_csv(
             'DeudaData2.csv',
             index=False,
