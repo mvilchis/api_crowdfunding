@@ -149,12 +149,17 @@ def merge_data(projects_data, users_data, fundings_data):
     return projects_users_data, fundings_users_data
 
 
-def get_indexes(indexes, estatal=False):
-    data = pd.concat([get_index_data(**idx) for idx in indexes])
+def get_indexes(indexes, _id, estatal=False):
+    data = pd.concat([
+        get_index_data(_id="%s%s" % (_id, i + 1), **idx)
+        for i, idx in enumerate(indexes)
+    ])
     data[u'cve'] = 0
     if estatal:
-        estatal = pd.concat(
-            [get_index_data(estatal=True, **idx) for idx in indexes])
+        estatal = pd.concat([
+            get_index_data(_id="%s%s" % (_id, i + 1), estatal=True, **idx)
+            for i, idx in enumerate(indexes)
+        ])
         data = pd.concat([data, estatal])
 
     ID2 = get_ids2(data)
