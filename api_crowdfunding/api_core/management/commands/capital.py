@@ -8,7 +8,6 @@ from api_core.models import FundingCapital, ProjectCapital, UserCapital
 from django.core.management.base import BaseCommand
 
 ID = 'i4'
-NAME = 'Capital'
 
 
 class Command(BaseCommand):
@@ -61,5 +60,5 @@ class Command(BaseCommand):
         }]
 
         data, ID2, DesGeo, RangeT = get_indexes(indexes, _id=ID, estatal=False)
-        save_data(NAME, data, ID2, DesGeo, RangeT)
-        get_acumulado(data, NAME)
+        save_data(ID, data, ID2, DesGeo, RangeT)
+        get_acumulado(data, ID)

@@ -12,7 +12,6 @@ from api_core.models import (FundingRecompensas, ProjectRecompesas,
 from django.core.management.base import BaseCommand
 
 ID = 'i2'
-NAME = 'Recompensas'
 
 
 class Command(BaseCommand):
@@ -72,5 +71,5 @@ class Command(BaseCommand):
             'column': u'Duracion'
         }]
         data, ID2, DesGeo, RangeT = get_indexes(indexes, _id=ID, estatal=True)
-        save_data(NAME, data, ID2, DesGeo, RangeT)
-        get_acumulado(data, NAME)
+        save_data(ID, data, ID2, DesGeo, RangeT)
+        get_acumulado(data, ID)
