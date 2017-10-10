@@ -5,9 +5,6 @@ from api_core.indexes import (format_funding_data, format_projects_data,
                               format_users_data, get_acumulado,
                               get_fundind_data, get_indexes, get_projects_data,
                               get_users_data, merge_data, nunique, save_data)
-from api_core.mi_cochinito import (get_micochinito_donations,
-                                   get_micochinito_donors,
-                                   get_micochinito_projects)
 from api_core.models import FundingDonation, ProjectDonation, UserDonation
 from django.core.management.base import BaseCommand
 
@@ -20,18 +17,12 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         projects_data = format_projects_data(
-            pd.concat([
-                get_projects_data(ProjectDonation),
-                get_micochinito_projects()
-            ]))
-        users_data = format_users_data(
-            pd.concat([get_users_data(UserDonation),
-                       get_micochinito_donors()]))
-        fundings_data = format_funding_data(
-            pd.concat([
-                get_fundind_data(FundingDonation),
-                get_micochinito_donations()
-            ]))
+            get_projects_data(ProjectDonation))
+        users_data = format_users_data(get_users_data(UserDonation))
+        fundings_data = format_funding_data(get_fundind_data(FundingDonation))
+
+        projects_users_data, fundings_users_data = merge_data(
+            projects_data, users_data, fundings_data)
 
         #Adding user info
         projects_users_data, fundings_users_data = merge_data(
