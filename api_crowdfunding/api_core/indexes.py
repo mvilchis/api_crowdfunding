@@ -11,6 +11,7 @@ sys.setdefaultencoding('UTF8')
 nunique = lambda x: x.nunique()
 
 DATA_PATH = 'data/'
+FORMAT = ["id", "m", "t", "valor", "id2", "cve", "DesGeo"]
 
 
 def get_CP():
@@ -201,17 +202,12 @@ def get_acumulado(data, name):
     path = '%s%s' % (DATA_PATH, name)
 
     pd.concat(file_acumulado).to_csv(
-        '%sAcumulado.csv' % path,
-        index=False,
-        columns=["id", "cve", "t", "valor", "m", "id2", "DesGeo"])
+        '%sAcumulado.csv' % path, index=False, columns=FORMAT)
 
 
 def save_data(name, data, ID2, DesGeo, RangeT):
     path = '%s%s' % (DATA_PATH, name)
-    data.to_csv(
-        '%sData.csv' % path,
-        index=False,
-        columns=["id", "m", "t", "valor", "id2", "cve", "DesGeo"])
+    data.to_csv('%s.csv' % path, index=False, columns=FORMAT)
     ID2.to_csv('%sCodigosGrupos.csv' % path, index=False)
     DesGeo.to_csv('%sDesGeo.csv' % path, index=False)
     RangeT.to_csv('%sRangosTemporales.csv' % path, index=False)
