@@ -12,6 +12,10 @@ nunique = lambda x: x.nunique()
 
 DATA_PATH = 'data/'
 FORMAT = ["id", "m", "t", "valor", "id2", "cve", "DesGeo"]
+PROJECTS_CATEGORIES = [
+    u'Total', u'Categoria', 'Genero', u'EstadoCivil', u'ExitoFondeo', u'Plazo'
+]
+FUNDINGS_CATEGORIES = [u'Total', 'Genero', u'EstadoCivil']
 
 
 def get_CP():

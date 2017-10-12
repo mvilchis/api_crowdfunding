@@ -1,9 +1,10 @@
 from pandas.core.groupby import GroupBy
 
-from api_core.indexes import (format_funding_data, format_projects_data,
-                              format_users_data, get_acumulado,
-                              get_fundind_data, get_indexes, get_projects_data,
-                              get_users_data, merge_data, nunique, save_data)
+from api_core.indexes import (PROJECTS_CATEGORIES, format_funding_data,
+                              format_projects_data, format_users_data,
+                              get_acumulado, get_fundind_data, get_indexes,
+                              get_projects_data, get_users_data, merge_data,
+                              nunique, save_data)
 from api_core.mi_cochinito import (get_micochinito_donations,
                                    get_micochinito_donors,
                                    get_micochinito_projects)
@@ -39,35 +40,35 @@ class Command(BaseCommand):
         indexes = [{
             'dataframe': projects_users_data,
             'operation': GroupBy.size,
-            'elements': [u'Total', u'Categoria']
+            'elements': PROJECTS_CATEGORIES[:-1]
         }, {
             'dataframe': succesful_projects_data,
             'operation': GroupBy.size,
-            'elements': [u'Total', u'Categoria']
+            'elements': PROJECTS_CATEGORIES[:-2]
         }, {
             'dataframe': projects_users_data,
             'operation': GroupBy.sum,
-            'elements': [u'Total', u'Categoria', u'ExitoFondeo'],
+            'elements': PROJECTS_CATEGORIES[:-2],
             'column': u'MontoRecaudado'
         }, {
             'dataframe': projects_users_data,
             'operation': GroupBy.mean,
-            'elements': [u'Total', u'Categoria', u'ExitoFondeo'],
+            'elements': PROJECTS_CATEGORIES[:-1],
             'column': u'MontoRecaudado'
         }, {
             'dataframe': projects_users_data,
             'operation': GroupBy.mean,
-            'elements': [u'Total', u'Categoria'],
+            'elements': PROJECTS_CATEGORIES[:-2],
             'column': u'ExitoFondeo'
         }, {
             'dataframe': projects_users_data,
             'operation': GroupBy.sum,
-            'elements': [u'Total'],
+            'elements': PROJECTS_CATEGORIES[:-2],
             'column': u'Fondeadores'
         }, {
             'dataframe': projects_users_data,
             'operation': GroupBy.mean,
-            'elements': [u'Total', 'Categoria'],
+            'elements': PROJECTS_CATEGORIES[:-1],
             'column': u'Duracion'
         }]
         data, ID2, DesGeo, RangeT = get_indexes(indexes, _id=ID, estatal=True)
