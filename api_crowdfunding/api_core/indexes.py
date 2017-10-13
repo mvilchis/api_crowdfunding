@@ -74,7 +74,9 @@ def get_ids2(data):
 
 
 def homologate_field(data, field):
-    data[field] = data['user_id'].astype(str) + '-' + data[field].astype(str)
+    if not data.empty:
+        data[field] = data['user_id'].astype(str) + '-' + data[field].astype(
+            str)
     return data
 
 
@@ -107,16 +109,22 @@ def format_projects_data(data):
 
 def get_users_data(user_model):
     data = pd.DataFrame(list(user_model.objects.all().values()))
-    return homologate_field(data, u'IdUsuario') if not data.empty else data
+    return homologate_field(data, u'IdUsuario')
 
 
 def format_users_data(data):
     CP = get_CP()
-    data['EstadoCivil'] = data['EstadoCivil'].fillna('ND')
-    data['Genero'] = data['Genero'].fillna('ND')
+    if not data.empty:
+        data['EstadoCivil'] = data['EstadoCivil'].fillna('ND')
+        data['Genero'] = data['Genero'].fillna('ND')
 
-    data.loc[data[u'EstadoCivil'] == '', u'EstadoCivil'] = 'ND'
-    data.loc[data[u'Genero'] == '', u'Genero'] = 'ND'
+        data.loc[data[u'EstadoCivil'] == '', u'EstadoCivil'] = 'ND'
+        data.loc[data[u'Genero'] == '', u'Genero'] = 'ND'
+    else:
+        data['EstadoCivil'] = 'ND'
+        data['Genero'] = 'ND'
+        data['CodigoPostal'] = 0
+        data['IdUsuario'] = np.nan
 
     return pd.merge(data, CP, how='left', on=[u'CodigoPostal'])
 
@@ -185,7 +193,7 @@ def get_acumulado(data, name):
     years = data['t'].drop_duplicates().values
     file_acumulado = []
     acumulado = []
-    for y in range(min(years), max(years) + 1):
+    for y in range(int(min(years)), int(max(years)) + 1):
         by_year = data.loc[data["t"] == y]
         quarters = by_year['m'].drop_duplicates().values
         quarters.sort()
