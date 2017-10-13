@@ -59,6 +59,20 @@ def get_index_data(dataframe,
 
     data = pd.concat(data)
     data['id'] = _id
+    if not estatal:
+        data[u'cve'] = 0
+
+    ID2 = get_ids2(data)
+    data = pd.merge(data, ID2, how='left', on=[u'id3', u'id'])
+
+    del data['id3']
+    data[u'DesGeo'] = data[u'cve'].map(lambda x: 'N' if x == 0 else 'E')
+    path = '%s%s' % (DATA_PATH, _id)
+
+    ID2.to_csv('%sCodigosGrupos.csv' % path, index=False)
+    data.to_csv('%s.csv' % path, index=False, columns=FORMAT)
+    get_acumulado(data, _id)
+
     return data
 
 
@@ -169,7 +183,6 @@ def get_indexes(indexes, _id, estatal=False):
         get_index_data(_id="%s%s" % (_id, i + 1), **idx)
         for i, idx in enumerate(indexes)
     ])
-    data[u'cve'] = 0
     if estatal:
         estatal = pd.concat([
             get_index_data(_id="%s%s" % (_id, i + 1), estatal=True, **idx)
@@ -177,16 +190,11 @@ def get_indexes(indexes, _id, estatal=False):
         ])
         data = pd.concat([data, estatal])
 
-    ID2 = get_ids2(data)
-    data = pd.merge(data, ID2, how='left', on=[u'id3', u'id'])
-
-    del data['id3']
-    data[u'DesGeo'] = data[u'cve'].map(lambda x: 'N' if x == 0 else 'E')
-    DesGeo = data[['id', 'DesGeo']].drop_duplicates()
-    RangeT = data[['id', 't', 'm']].drop_duplicates().rename(
+    RangeT = data[['t', 'm']].drop_duplicates().rename(
         columns={"t": "ranget",
                  "m": "rangem"})
-    return data, ID2, DesGeo, RangeT
+    RangeT.to_csv(
+        '%sRangosTemporales.csv' % '%s%s' % (DATA_PATH, _id), index=False)
 
 
 def get_acumulado(data, name):
@@ -215,11 +223,3 @@ def get_acumulado(data, name):
 
     pd.concat(file_acumulado).to_csv(
         '%sAcumulado.csv' % path, index=False, columns=FORMAT)
-
-
-def save_data(name, data, ID2, DesGeo, RangeT):
-    path = '%s%s' % (DATA_PATH, name)
-    data.to_csv('%s.csv' % path, index=False, columns=FORMAT)
-    ID2.to_csv('%sCodigosGrupos.csv' % path, index=False)
-    DesGeo.to_csv('%sDesGeo.csv' % path, index=False)
-    RangeT.to_csv('%sRangosTemporales.csv' % path, index=False)
