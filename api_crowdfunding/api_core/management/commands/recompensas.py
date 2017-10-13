@@ -5,7 +5,7 @@ from api_core.indexes import (FUNDINGS_CATEGORIES, PROJECTS_CATEGORIES,
                               format_funding_data, format_projects_data,
                               format_users_data, get_acumulado,
                               get_fundind_data, get_indexes, get_projects_data,
-                              get_users_data, merge_data, nunique, save_data)
+                              get_users_data, merge_data, nunique)
 from api_core.mi_cochinito import (get_micochinito_donations,
                                    get_micochinito_donors,
                                    get_micochinito_projects)
@@ -76,6 +76,4 @@ class Command(BaseCommand):
             'elements': PROJECTS_CATEGORIES[:-1],
             'column': u'Duracion'
         }]
-        data, ID2, DesGeo, RangeT = get_indexes(indexes, _id=ID, estatal=True)
-        save_data(ID, data, ID2, DesGeo, RangeT)
-        get_acumulado(data, ID)
+        get_indexes(indexes, _id=ID, estatal=False)
