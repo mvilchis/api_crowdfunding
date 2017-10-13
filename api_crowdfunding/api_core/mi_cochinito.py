@@ -29,7 +29,7 @@ def get_micochinito(field):
 
 def get_micochinito_projects():
     MC = get_micochinito('projects')
-    ids, users, categories, amount_goal, term, date_init, achieved = [], [], [], [], [], [], []
+    ids, users, categories, amount_goal, term, date_init, achieved, donors_count = [], [], [], [], [], [], [], []
     for i in MC:
         ids.append(i['project_id'])
         users.append(i['owner_id'])
@@ -40,8 +40,10 @@ def get_micochinito_projects():
             datetime.strptime(i['project_starts_at']['date'],
                               "%Y-%m-%d %H:%M:%S.%f").strftime("%Y-%m-%d"))
         achieved.append(i['amout_achieved'])
+        donors_count.append(i['donors_count'])
 
     d = {
+        u'Fondeadores': donors_count,
         u'IdProyecto': ids,
         u'IdUsuario': users,
         u'Categoria': categories,
@@ -55,7 +57,7 @@ def get_micochinito_projects():
         columns=[
             u'Categoria', u'CuotaComision', u'FechaInicio', u'FechaTermino',
             u'IdProyecto', u'IdUsuario', u'MontoPedido', u'MontoRecaudado',
-            u'PlazoDias', u'Subcategoria', u'TasaInteresAnual'
+            u'PlazoDias', u'Subcategoria', u'TasaInteresAnual', u'Fondeadores'
         ])
 
 
@@ -92,8 +94,8 @@ def get_micochinito_donations():
     return pd.DataFrame(
         data=d,
         columns=[
-            u'ExitoFondeo', u'Fecha', u'Fondeadores', u'IdProyecto',
-            u'IdUsuario', u'MontoRecaudado', u'id', u'user_id'
+            u'ExitoFondeo', u'Fecha', u'IdProyecto', u'IdUsuario',
+            u'MontoRecaudado', u'id', u'user_id'
         ])
 
 
