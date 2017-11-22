@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: api-crowdfunding
+  labels:
+    app: api-crowdfunding
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api-crowdfunding
+    spec:
+      containers:
+      - name: api-crowdfunding
+        image: gcr.io/ordinal-stone-180317/api_crowdfunding:v0.0.1
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: sqlite-data
+          mountPath: /webhook/db.sqlite3
+        - name: raw-csv
+          mountPath: /webhook/csv/
+        - name: raw-json
+          mountPath: /webhook/json/
+      volumes:
+      - name: sqlite-data
+        hostPath:
+          path: /home/crowdfundingmex/db.sqlite3
+      - name: sqlite-data
+        hostPath:
+          path: /home/crowdfundingmex/db.sqlite3
+      - name: raw-json
+        hostPath:
+          path: /home/crowdfundingmex/raw_json
+      - name: raw-csv
+        hostPath:
+          path: /home/crowdfundingmex/raw_csv
