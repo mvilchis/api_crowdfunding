@@ -222,4 +222,4 @@ def get_acumulado(data, name):
     path = '%s%s' % (DATA_PATH, name)
 
     pd.concat(file_acumulado).to_csv(
-        '%sAcumulado.csv' % path, index=False, columns=FORMAT)
+        '%s1.csv' % path, index=False, columns=FORMAT)
