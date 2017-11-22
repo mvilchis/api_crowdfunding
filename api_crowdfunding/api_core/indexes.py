@@ -10,7 +10,7 @@ sys.setdefaultencoding('UTF8')
 
 nunique = lambda x: x.nunique()
 
-DATA_PATH = 'data/'
+DATA_PATH = 'json/'
 FORMAT = ["id", "m", "t", "valor", "id2", "cve", "DesGeo"]
 PROJECTS_CATEGORIES = [
     u'Total', u'Categoria', 'Genero', u'EstadoCivil', u'ExitoFondeo', u'Plazo'
