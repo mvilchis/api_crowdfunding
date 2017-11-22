@@ -15,6 +15,12 @@ spec:
       - name: api-crowdfunding
         image: gcr.io/ordinal-stone-180317/api_crowdfunding:v0.0.1
         imagePullPolicy: Always
+        env:
+          - name: TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: crowdfun-data
+                key: micochinito-token
         volumeMounts:
         - name: sqlite-data
           mountPath: /webhook/db.sqlite3
