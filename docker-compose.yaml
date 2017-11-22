@@ -2,7 +2,7 @@ version: '2'
 services:
 
     plataformacf:
-        image: api_crowdfunding
+        image: gcr.io/ordinal-stone-180317/api_crowdfunding:v0.0.1
         build:
           context: .
           dockerfile: Dockerfile
