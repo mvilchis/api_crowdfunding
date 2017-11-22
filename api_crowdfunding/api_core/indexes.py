@@ -3,6 +3,7 @@ import sys
 
 import numpy as np
 import pandas as pd
+import json
 
 # sys.setdefaultencoding() does not exist, here!
 reload(sys)  # Reload does the trick!
@@ -10,7 +11,8 @@ sys.setdefaultencoding('UTF8')
 
 nunique = lambda x: x.nunique()
 
-DATA_PATH = 'json/'
+DATA_PATH = 'csv/'
+JSON_PATH = 'json/'
 FORMAT = ["id", "m", "t", "valor", "id2", "cve", "DesGeo"]
 PROJECTS_CATEGORIES = [
     u'Total', u'Categoria', 'Genero', u'EstadoCivil', u'ExitoFondeo', u'Plazo'
@@ -71,6 +73,10 @@ def get_index_data(dataframe,
 
     ID2.to_csv('%sCodigosGrupos.csv' % path, index=False)
     data.to_csv('%s.csv' % path, index=False, columns=FORMAT)
+    path = '%s%s' % (JSON_PATH, _id)
+    json.dump(
+        json.loads(data.to_json(orient='records')),
+        open('%s.json' % path, 'w'))
     get_acumulado(data, _id)
 
     return data
@@ -221,5 +227,9 @@ def get_acumulado(data, name):
             file_acumulado.append(aux)
     path = '%s%s' % (DATA_PATH, name)
 
-    pd.concat(file_acumulado).to_csv(
-        '%s1.csv' % path, index=False, columns=FORMAT)
+    a = pd.concat(file_acumulado)
+    a.to_csv('%s1.csv' % path, index=False, columns=FORMAT)
+    path = '%s%s' % (JSON_PATH, name)
+    #print a.to_json(orient='records')
+    json.dump(
+        json.loads(a.to_json(orient='records')), open('%s1.json' % path, 'w'))
