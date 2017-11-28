@@ -69,15 +69,9 @@ def get_index_data(dataframe,
 
     del data['id3']
     data[u'DesGeo'] = data[u'cve'].map(lambda x: 'N' if x == 0 else 'E')
-    path = '%s%s' % (DATA_PATH, _id)
 
+    path = '%s%s' % (DATA_PATH, _id)
     ID2.to_csv('%sCodigosGrupos.csv' % path, index=False)
-    data.to_csv('%s.csv' % path, index=False, columns=FORMAT)
-    path = '%s%s' % (JSON_PATH, _id)
-    json.dump(
-        json.loads(data.to_json(orient='records')),
-        open('%s.json' % path, 'w'))
-    get_acumulado(data, _id)
 
     return data
 
@@ -195,6 +189,15 @@ def get_indexes(indexes, _id, estatal=False):
             for i, idx in enumerate(indexes)
         ])
         data = pd.concat([data, estatal])
+
+    path = '%s%s' % (DATA_PATH, _id)
+    data.to_csv('%s.csv' % path, index=False, columns=FORMAT)
+    print data
+    path = '%s%s' % (JSON_PATH, _id)
+    json.dump(
+        json.loads(data.to_json(orient='records')),
+        open('%s.json' % path, 'w'))
+    get_acumulado(data, _id)
 
     RangeT = data[['t', 'm']].drop_duplicates().rename(
         columns={"t": "ranget",
