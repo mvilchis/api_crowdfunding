@@ -192,7 +192,6 @@ def get_indexes(indexes, _id, estatal=False):
 
     path = '%s%s' % (DATA_PATH, _id)
     data.to_csv('%s.csv' % path, index=False, columns=FORMAT)
-    print data
     path = '%s%s' % (JSON_PATH, _id)
     json.dump(
         json.loads(data.to_json(orient='records')),
