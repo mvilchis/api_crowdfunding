@@ -1,9 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import json
 import string
 import sys
 
 import numpy as np
 import pandas as pd
-import json
 
 # sys.setdefaultencoding() does not exist, here!
 reload(sys)  # Reload does the trick!
@@ -13,11 +15,17 @@ nunique = lambda x: x.nunique()
 
 DATA_PATH = 'csv/'
 JSON_PATH = 'json/'
-FORMAT = ["id", "m", "t", "valor", "id2", "cve", "DesGeo"]
+#FORMAT = ["id", "m", "t", "valor", "id2", "cve", "DesGeo"]
+_FORMAT = [
+    u"Año", "Trimestre", "Indicador", "Categoria", "Estado", "Valor",
+    "Agregacion"
+]
 PROJECTS_CATEGORIES = [
     u'Total', u'Categoria', 'Genero', u'EstadoCivil', u'ExitoFondeo', u'Plazo'
 ]
 FUNDINGS_CATEGORIES = [u'Total', 'Genero', u'EstadoCivil']
+
+id_gen = lambda x, y: "%s%s" % (x, y)
 
 
 def get_CP():
@@ -179,30 +187,53 @@ def merge_data(projects_data, users_data, fundings_data):
 
 
 def get_indexes(indexes, _id, estatal=False):
-    data = pd.concat([
-        get_index_data(_id="%s%s" % (_id, i + 1), **idx)
-        for i, idx in enumerate(indexes)
-    ])
-    if estatal:
-        estatal = pd.concat([
-            get_index_data(_id="%s%s" % (_id, i + 1), estatal=True, **idx)
-            for i, idx in enumerate(indexes)
-        ])
-        data = pd.concat([data, estatal])
+    for i, idx in enumerate(indexes):
+        data = get_index_data(_id=id_gen(_id, i + 1), **idx)
+        if estatal:
+            _data = get_index_data(_id=id_gen(_id, i + 1), estatal=True, **idx)
+            data = pd.concat([data, _data])
+        path = '%s%s' % (JSON_PATH, id_gen(_id, i + 1))
+        json.dump(
+            json.loads(data.to_json(orient='records')),
+            open('%s.json' % path, 'w'))
+        data_csv = data.rename(columns={
+            u'id': 'Indicador',
+            u'm': 'Trimestre',
+            u'valor': 'Valor',
+            u'id2': 'Categoria',
+            u't': u'Año',
+            u'cve': 'Estado',
+            u'DesGeo': 'Agregacion',
+        })
+        path = '%s%s' % (DATA_PATH, id_gen(_id, i + 1))
+        data_csv.to_csv('%s.csv' % path, index=False, columns=_FORMAT)
 
-    path = '%s%s' % (DATA_PATH, _id)
-    data.to_csv('%s.csv' % path, index=False, columns=FORMAT)
-    path = '%s%s' % (JSON_PATH, _id)
-    json.dump(
-        json.loads(data.to_json(orient='records')),
-        open('%s.json' % path, 'w'))
-    get_acumulado(data, _id)
+        get_acumulado(data, id_gen(_id, i + 1))
 
-    RangeT = data[['t', 'm']].drop_duplicates().rename(
-        columns={"t": "ranget",
-                 "m": "rangem"})
-    RangeT.to_csv(
-        '%sRangosTemporales.csv' % '%s%s' % (DATA_PATH, _id), index=False)
+    #data = pd.concat([
+    #    get_index_data(_id="%s%s" % (_id, i + 1), **idx)
+    #    for i, idx in enumerate(indexes)
+    #])
+    #if estatal:
+    #    estatal = pd.concat([
+    #        get_index_data(_id="%s%s" % (_id, i + 1), estatal=True, **idx)
+    #        for i, idx in enumerate(indexes)
+    #    ])
+    #    data = pd.concat([data, estatal])
+
+    #path = '%s%s' % (DATA_PATH, _id)
+    #data.to_csv('%s.csv' % path, index=False, columns=FORMAT)
+    #path = '%s%s' % (JSON_PATH, _id)
+    #json.dump(
+    #    json.loads(data.to_json(orient='records')),
+    #    open('%s.json' % path, 'w'))
+    #get_acumulado(data, _id)
+
+    #RangeT = data[['t', 'm']].drop_duplicates().rename(
+    #    columns={"t": "ranget",
+    #             "m": "rangem"})
+    #RangeT.to_csv(
+    #    '%sRangosTemporales.csv' % '%s%s' % (DATA_PATH, _id), index=False)
 
 
 def get_acumulado(data, name):
@@ -227,11 +258,20 @@ def get_acumulado(data, name):
             aux["id"] = aux["id"].astype(str) + "1"
 
             file_acumulado.append(aux)
-    path = '%s%s' % (DATA_PATH, name)
 
     a = pd.concat(file_acumulado)
-    a.to_csv('%s1.csv' % path, index=False, columns=FORMAT)
     path = '%s%s' % (JSON_PATH, name)
     #print a.to_json(orient='records')
     json.dump(
         json.loads(a.to_json(orient='records')), open('%s1.json' % path, 'w'))
+    path = '%s%s' % (DATA_PATH, name)
+    a = a.rename(columns={
+        u'id': 'Indicador',
+        u'm': 'Trimestre',
+        u'valor': 'Valor',
+        u'id2': 'Categoria',
+        u't': u'Año',
+        u'cve': 'Estado',
+        u'DesGeo': 'Agregacion',
+    })
+    a.to_csv('%s1.csv' % path, index=False, columns=_FORMAT)
