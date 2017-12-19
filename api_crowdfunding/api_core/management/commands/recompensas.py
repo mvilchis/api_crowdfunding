@@ -1,11 +1,10 @@
 import pandas as pd
 from pandas.core.groupby import GroupBy
 
-from api_core.indexes import (FUNDINGS_CATEGORIES, PROJECTS_CATEGORIES,
-                              format_funding_data, format_projects_data,
-                              format_users_data, get_acumulado,
-                              get_fundind_data, get_indexes, get_projects_data,
-                              get_users_data, merge_data, nunique)
+from api_core.indexes import (
+    FUNDINGS_CATEGORIES, PROJECTS_CATEGORIES, format_funding_data,
+    format_projects_data, format_users_data, get_acumulado, get_fundind_data,
+    get_indexes, get_projects_data, get_users_data, merge_data, nunique)
 from api_core.mi_cochinito import (get_micochinito_donations,
                                    get_micochinito_donors,
                                    get_micochinito_projects)
