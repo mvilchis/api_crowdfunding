@@ -46,12 +46,67 @@ def get_index_data_aux(groupby, operation, column=None):
         return operation(groupby)
 
 
+def aux_fill_missing2(data, t, m, cve=None):
+    if not ((data['t'] == t) & (data['m'] == m)).any():
+        missing = {"t": t, "m": m, "valor": 0}
+        if cve:
+            missing.update({'cve': cve})
+        data = data.append(missing, ignore_index=True)
+
+    return data
+
+
+def aux_fill_missing(data, range_begin, range_end, cve=None):
+    m_b, t_b = range_begin
+    m_e, t_e = range_end
+    for t in range(t_b, t_e):
+        for m in range(1, 5):
+            if t == t_b and m < m_b:
+                continue
+            elif t == t_e and m > m_e:
+                break
+            else:
+                if cve:
+                    if not ((data['t'] == t) & (data['m'] == m) &
+                            (data['cve'] == cve)).any():
+                        data = data.append(
+                            {
+                                "t": t,
+                                "m": m,
+                                "valor": 0,
+                                'cve': cve
+                            },
+                            ignore_index=True)
+                else:
+                    if not ((data['t'] == t) & (data['m'] == m)).any():
+                        data = data.append(
+                            {
+                                "t": t,
+                                "m": m,
+                                "valor": 0
+                            }, ignore_index=True)
+
+    return data
+
+
+def fill_missing(data, range_begin, range_end, estatal):
+
+    if estatal:
+        for cve in data[['cve']].drop_duplicates()['cve']:
+            data = aux_fill_missing(data, range_begin, range_end, cve)
+    else:
+        data = aux_fill_missing(data, range_begin, range_end)
+    return data
+
+
 def get_index_data(dataframe,
                    _id,
                    operation,
                    elements,
                    column=None,
-                   estatal=False):
+                   estatal=False,
+                   range_begin=None,
+                   range_end=None):
     data = []
     for element in elements:
         columns = [u't', u'm', 'cve'] if estatal else [u't', u'm']
@@ -60,6 +115,9 @@ def get_index_data(dataframe,
         data_e = get_index_data_aux(
             dataframe.groupby(columns), operation, column).reset_index(
                 name="valor")
+        if not estatal:
+            data_e = fill_missing(data_e, range_begin, range_end, estatal)
+
         if element == 'Total':
             data_e['id3'] = 'Total'
         else:
@@ -186,11 +244,21 @@ def merge_data(projects_data, users_data, fundings_data):
     return projects_users_data, fundings_users_data
 
 
-def get_indexes(indexes, _id, estatal=False):
+def get_indexes(indexes, _id, estatal=False, range_begin=None, range_end=None):
+
     for i, idx in enumerate(indexes):
-        data = get_index_data(_id=id_gen(_id, i + 1), **idx)
+        data = get_index_data(
+            _id=id_gen(_id, i + 1),
+            range_begin=range_begin,
+            range_end=range_end,
+            **idx)
         if estatal:
-            _data = get_index_data(_id=id_gen(_id, i + 1), estatal=True, **idx)
+            _data = get_index_data(
+                _id=id_gen(_id, i + 1),
+                estatal=True,
+                range_begin=range_begin,
+                range_end=range_end,
+                **idx)
             data = pd.concat([data, _data])
         path = '%s%s' % (JSON_PATH, id_gen(_id, i + 1))
         json.dump(
@@ -234,6 +302,13 @@ def get_indexes(indexes, _id, estatal=False):
     #             "m": "rangem"})
     #RangeT.to_csv(
     #    '%sRangosTemporales.csv' % '%s%s' % (DATA_PATH, _id), index=False)
+
+
+def get_range(data, func):
+    _data = data[['t', 'm']].drop_duplicates()
+    t = func(_data['t'])
+    m = max(_data.loc[_data['t'] == t]['m'])
+    return m, t
 
 
 def get_acumulado(data, name):
